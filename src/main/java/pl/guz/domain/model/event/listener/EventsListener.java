@@ -20,12 +20,12 @@ public class EventsListener {
         subscribe();
     }
 
-    public void subscribe() {
+    private void subscribe() {
         rx.Observable.merge(
                 reactiveCamel.toObservable(Exchanges.CREATED_MONEY_SEND_TRANSACTION, String.class),
                 reactiveCamel.toObservable(Exchanges.CREATED_USER, String.class))
-                .doOnNext(event -> log.info("I catch event: {}", event))
-                .subscribe();
+                     .doOnNext(event -> log.info("I catch event: {}", event))
+                     .subscribe();
 
     }
 

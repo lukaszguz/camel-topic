@@ -1,25 +1,32 @@
 package pl.guz.domain.model.user;
 
 import lombok.AllArgsConstructor;
+import lombok.SneakyThrows;
+import lombok.extern.slf4j.Slf4j;
+import org.joda.time.DateTime;
 import org.springframework.stereotype.Service;
 import pl.guz.domain.model.event.notify.EventNotifier;
 
-import javax.annotation.PostConstruct;
-import java.util.Date;
+import java.util.UUID;
 
 @Service
 @AllArgsConstructor
+@Slf4j
 public class UserService {
 
     private final EventNotifier eventNotifier;
 
-    @PostConstruct
-    void init() {
-        createUser();
-    }
-
-    public void createUser() {
+    @SneakyThrows
+    public void createUser(String name) {
         // ... creating user
-        eventNotifier.publishEvent(new CreateUser(new Date(), "Jan Kowalski"));
+        CreatedUser createdUser = new CreatedUser(UUID.randomUUID(),
+                                                  DateTime.now()
+                                                          .toDate(),
+                                                  name);
+        eventNotifier.publishEvent(createdUser);
+
+//        DomainEventEntity one = cassandraOperations.selectOne("select * from events where id=75172253-4794-430d-b201-1d5effc56566", DomainEventEntity.class);
+//        log.info("Catch one: {}", one);
+//        objectMapper.readValue(one.getEvent(), CreatedUser.class);
     }
 }
