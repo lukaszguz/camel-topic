@@ -4,9 +4,11 @@ import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.camel.rx.ReactiveCamel;
 import org.springframework.stereotype.Component;
-import pl.guz.domain.infrastructure.Exchanges;
 
 import javax.annotation.PostConstruct;
+
+import static pl.guz.domain.infrastructure.Exchanges.CREATED_MONEY_SEND_TRANSACTION;
+import static pl.guz.domain.infrastructure.Exchanges.CREATED_USER;
 
 @Component
 @AllArgsConstructor
@@ -22,10 +24,10 @@ public class EventsListener {
 
     private void subscribe() {
         rx.Observable.merge(
-                reactiveCamel.toObservable(Exchanges.CREATED_MONEY_SEND_TRANSACTION, String.class),
-                reactiveCamel.toObservable(Exchanges.CREATED_USER, String.class))
-                     .doOnNext(event -> log.info("I catch event: {}", event))
-                     .subscribe();
+                reactiveCamel.toObservable(CREATED_MONEY_SEND_TRANSACTION, String.class),
+                reactiveCamel.toObservable(CREATED_USER, String.class))
+                    .doOnNext(event -> log.info("I catch event: {}", event))
+                    .subscribe();
 
     }
 
