@@ -1,13 +1,14 @@
 package pl.guz.domain.model.event;
 
-import java.util.Date;
+import org.joda.time.DateTime;
+
 import java.util.UUID;
 
 public interface DomainEvent {
 
     UUID id();
 
-    Date occuredOn();
+    DateTime occuredOn();
 
     int eventVersion();
 

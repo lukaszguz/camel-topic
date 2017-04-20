@@ -8,6 +8,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.cassandra.core.CassandraOperations;
 import org.springframework.test.context.junit4.SpringRunner;
 import pl.guz.domain.model.user.UserService;
 
@@ -17,6 +18,9 @@ public class EventRouteConfigTest extends CamelTestSupport {
 
     @Autowired
     UserService userService;
+
+    @Autowired
+    CassandraOperations cassandraOperations;
 
     @Test
     public void testRoute() throws Exception {
@@ -33,11 +37,13 @@ public class EventRouteConfigTest extends CamelTestSupport {
         context.start();
         userService.createUser("Test");
 
+        // then:
+
     }
 
     @Override
     protected RoutesBuilder createRouteBuilder() throws Exception {
-        return new EventRouteConfig().eventRoute();
+        return new EventRouteConfig().eventRoute(cassandraOperations);
     }
 
     @Override

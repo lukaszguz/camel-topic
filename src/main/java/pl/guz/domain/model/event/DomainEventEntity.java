@@ -5,13 +5,17 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.validator.constraints.NotBlank;
+import org.joda.time.DateTime;
 import org.springframework.cassandra.core.PrimaryKeyType;
+import org.springframework.data.cassandra.mapping.CassandraType;
 import org.springframework.data.cassandra.mapping.Column;
 import org.springframework.data.cassandra.mapping.PrimaryKeyColumn;
 import org.springframework.data.cassandra.mapping.Table;
 
-import java.util.Date;
 import java.util.UUID;
+
+import static com.datastax.driver.core.DataType.Name.TIMESTAMP;
+import static com.datastax.driver.core.DataType.Name.UUID;
 
 @Table("events")
 @NoArgsConstructor
@@ -21,15 +25,17 @@ import java.util.UUID;
 public class DomainEventEntity {
 
     @PrimaryKeyColumn(ordinal = 0, type = PrimaryKeyType.CLUSTERED)
+    @CassandraType(type = UUID)
     private UUID id;
 
     @PrimaryKeyColumn(name = "occured_on", ordinal = 1, type = PrimaryKeyType.PARTITIONED)
-    private Date occuredOn;
+    @CassandraType(type = TIMESTAMP)
+    private DateTime occuredOn;
 
     @PrimaryKeyColumn(name = "event_version", ordinal = 2, type = PrimaryKeyType.PARTITIONED)
     private Integer eventVersion;
 
-    @PrimaryKeyColumn(ordinal = 3, type = PrimaryKeyType.PARTITIONED)
+    @PrimaryKeyColumn(name = "type", ordinal = 3, type = PrimaryKeyType.PARTITIONED)
     private String type;
 
     @Column("event")

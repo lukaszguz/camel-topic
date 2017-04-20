@@ -20,8 +20,7 @@ public class UserService {
     public void createUser(String name) {
         // ... creating user
         CreatedUser createdUser = new CreatedUser(UUID.randomUUID(),
-                                                  DateTime.now()
-                                                          .toDate(),
+                                                  DateTime.now(),
                                                   name);
         eventNotifier.publishEvent(createdUser);
 

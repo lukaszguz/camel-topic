@@ -1,17 +1,15 @@
 package pl.guz.domain.infrastructure.cassandra;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.collect.Lists;
 import lombok.AllArgsConstructor;
 import org.springframework.cassandra.config.CassandraCqlClusterFactoryBean;
-import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.data.cassandra.config.CassandraClusterFactoryBean;
 import org.springframework.data.cassandra.config.SchemaAction;
 import org.springframework.data.cassandra.config.java.AbstractCassandraConfiguration;
 import org.springframework.data.cassandra.convert.CustomConversions;
-import pl.guz.domain.model.event.converter.DomainEventToStringConverter;
+import pl.guz.serializer.DomainEventToStringConverter;
 
 import java.util.List;
 
@@ -21,16 +19,6 @@ public class CassandraConfiguration extends AbstractCassandraConfiguration {
 
     private CassandraProperties properties;
 
-    @Bean
-    ObjectMapper cassandraObjectMapper() {
-        return new ObjectMapper();
-    }
-
-    @Bean
-    DomainEventToStringConverter domainEventToStringConverter() {
-        return new DomainEventToStringConverter(cassandraObjectMapper());
-    }
-
     @Override
     protected String getKeyspaceName() {
         return "event_store";
@@ -38,7 +26,7 @@ public class CassandraConfiguration extends AbstractCassandraConfiguration {
 
     @Override
     public CustomConversions customConversions() {
-        List<Converter> converters = Lists.newArrayList(domainEventToStringConverter());
+        List<Converter> converters = Lists.newArrayList(new DomainEventToStringConverter());
         return new CustomConversions(converters);
     }
 
@@ -49,6 +37,11 @@ public class CassandraConfiguration extends AbstractCassandraConfiguration {
         cluster.setPassword(properties.getPassword());
         cluster.setContactPoints(properties.getContactPoints());
         return cluster;
+    }
+
+    @Override
+    public String[] getEntityBasePackages() {
+        return new String[]{"pl.guz.domain.model.event"};
     }
 
     @Override

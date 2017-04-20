@@ -2,16 +2,16 @@ package pl.guz.domain.model.transaction;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Value;
+import org.joda.time.DateTime;
 import pl.guz.domain.model.event.DomainEvent;
 
-import java.util.Date;
 import java.util.UUID;
 
 @Value
 public class CreatedMoneySendTransaction implements DomainEvent {
 
     private UUID id;
-    private Date occuredOn;
+    private DateTime occuredOn;
     private int value;
     private String currency;
 
@@ -23,7 +23,7 @@ public class CreatedMoneySendTransaction implements DomainEvent {
 
     @Override
     @JsonProperty
-    public Date occuredOn() {
+    public DateTime occuredOn() {
         return occuredOn;
     }
 
