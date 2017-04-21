@@ -49,4 +49,8 @@ public class DomainEventEntity {
         this.type = domainEvent.type();
         this.event = serializedEvent;
     }
+
+    public String serializedDomainEvent() {
+        return event;
+    }
 }

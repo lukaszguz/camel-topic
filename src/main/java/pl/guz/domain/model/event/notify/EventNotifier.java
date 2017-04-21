@@ -7,7 +7,7 @@ import org.springframework.stereotype.Component;
 import pl.guz.domain.model.event.DomainEvent;
 import rx.Observable;
 
-import static pl.guz.domain.infrastructure.Exchanges.EVENT_NOTIFIER;
+import static pl.guz.domain.infrastructure.Exchanges.EVENT_STORE;
 
 @Component
 @AllArgsConstructor
@@ -19,6 +19,6 @@ public class EventNotifier {
     public void publishEvent(DomainEvent domainEvent) {
         log.info("Send event {}", domainEvent);
         reactiveCamel.sendTo(
-                Observable.just(domainEvent), EVENT_NOTIFIER);
+                Observable.just(domainEvent), EVENT_STORE);
     }
 }
